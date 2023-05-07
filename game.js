@@ -204,6 +204,7 @@ class Home extends AdventureScene{
             }
         })
 
+        let flipped = false;
         let mailbox = this.add.text(this.w * 0.4, this.w * 0.2, "📫");
         mailbox.setFontSize(this.s * 4);
         mailbox.setInteractive();
@@ -216,6 +217,15 @@ class Home extends AdventureScene{
             }
             else{
                 this.showMessage("Come back tommorow to check for more!");
+            }
+
+            if(flipped == false){
+                mailbox.text = "📪"
+                flipped = true;
+            }
+            else{
+                mailbox.text = "📫";
+                flipped = false;
             }
         })
         mailbox.on('pointerdown', () => {
@@ -267,6 +277,67 @@ class Road extends AdventureScene{
     constructor(){
         super("Road");
     }
+    onEnter(){
+        this.cameras.main.setBackgroundColor("#ff9933");
+
+        let road = this.add.text(this.w * 0.1, this.w * 0.26, "⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛");
+        road.setFontSize(this.s * 3);
+
+        let neighborhood = this.add.text(this.w * 0.1, this.w * 0.01, "🏠🏠🏠🏠🏠🏠🏠🏠");
+        neighborhood.setFontSize(this.s * 5);
+
+        let neighborhood2 = this.add.text(this.w * 0.1, this.w * 0.5, "🏠🏠🏠🏠🏠🏠🏠🏠");
+        neighborhood2.setFontSize(this.s * 5);
+
+        let house = this.add.text(this.w * 0.65, this.w * 0.5, "🏡");
+        house.setInteractive();
+        house.setFontSize(this.s * 5);
+        house.on('pointerover', () => this.showMessage("Click this icon to go back home"));
+        house.on('pointerdown', () => {
+            this.gotoScene("Home");
+        });
+
+        let car = this.add.text(this.w * 0.35, this.w * 0.25, "🚗");
+        car.setFontSize(this.s * 4);
+        car.setInteractive();
+        car.on('pointerover', () => this.showMessage("Travel to where you want to go by cliking on it! Do you want to go to the hills or the farm?"));
+
+        // let weed = this.add.text(this.w * 0.35, this.w * 0.25, "🟤");
+
+        let hills = this.add.text(this.w * 0.01, this.w * 0.22, "🗻");
+        hills.setFontSize(this.s * 7);
+        hills.setInteractive();
+        hills.on('pointerover', () => this.showMessage("Click this icon to go to the hills"));
+        hills.on('pointerdown', () => {
+            this.gotoScene("Hills");
+        });
+
+        let farm = this.add.text(this.w * 0.65, this.w * 0.22, "🧑‍🌾");
+        farm.setFontSize(this.s * 7);
+        farm.setInteractive();
+        farm.on('pointerover', () => this.showMessage("Click this icon to go to the farm!"));
+        farm.on('pointerdown', () => {
+            this.gotoScene("Farm");
+        });
+    }
+}
+
+class Hills extends AdventureScene{
+    constructor(){
+        super("Hills");
+    }
+    onEnter(){
+        this.cameras.main.setBackgroundColor("#ff9933");
+    }
+}
+
+class Farm extends AdventureScene{
+    constructor(){
+        super("Farm");
+    }
+    onEnter(){
+        this.cameras.main.setBackgroundColor("#348C31");
+    }
 }
 
 const game = new Phaser.Game({
@@ -277,8 +348,8 @@ const game = new Phaser.Game({
         height: 1080
     },
     //scene: [Intro, Demo1, Demo2, Outro],
-    //scene: [Intro, Home],
-    scene: [Home,Road],
+    //scene: [Intro, Home, Road, Hills, Farm],
+    scene: [Intro,Home, Road,Hills,Farm],
     title: "Quiet West",
 });
 
