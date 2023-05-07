@@ -186,6 +186,23 @@ class Home extends AdventureScene{
                 this.showMessage("'Can you go drive up to the hills and get me some quartz rocks?' your mom asks.");
             }
             //CREATE A SCENARIO FOR GIVING MOM ROCKS, SHE GIVES FOOD FOR ANIMALS.
+            if(this.hasItem("roseQuartz")&&this.hasItem("quartz")){
+                this.showMessage("Wow, two kinds of quartz! heres some food for the animals as a reward");
+                this.gainItem("animal food");
+                this.gainItem("Animal Food");
+                this.loseItem("roseQuartz");
+                this.loseItem("quartz");
+            }
+            else if(!this.hasItem("roseQuartz")&&this.hasItem("quartz")){
+                this.showMessage("oooh some quartz. heres a reward, feed this to the farm animals.");
+                this.gainItem("animal food");
+                this.loseItem("quartz");
+            }
+            else if(this.hasItem("roseQuartz")&&!this.hasItem("quartz")){
+                this.showMessage("How did you find this before normal quartz?! Oh well, heres some farm animal food.");
+                this.gainItem("Animal Food");
+                this.loseItem("roseQuartz");
+            }
         })
 
         let car = this.add.text(this.w * 0.45, this.w * 0.3, "🚗");
@@ -328,6 +345,76 @@ class Hills extends AdventureScene{
     }
     onEnter(){
         this.cameras.main.setBackgroundColor("#ff9933");
+
+        let car = this.add.text(this.w * 0.7, this.w * 0.25, "🚗");
+        car.setFontSize(this.s * 4);
+        car.setInteractive();
+        car.on('pointerover', () => this.showMessage("Click on me to go back to the road!"));
+        car.on('pointerdown', () => {
+            this.gotoScene("Road");
+        });
+
+        let rock = this.add.text(this.w * 0.05, this.w * 0.22, "🪨"); 
+        rock.setFontSize(this.s * 2.5);
+        rock.setInteractive();
+        rock.on('pointerover', () => this.showMessage("This rock looks promising..."));
+        rock.on('pointerdown', () => {
+            this.showMessage("Dang, nothing here..");
+        });
+
+        let rock2 = this.add.text(this.w * 0.2, this.w * 0.5, "🪨"); 
+        rock2.setFontSize(this.s * 3);
+        rock2.setInteractive();
+        rock2.on('pointerover', () => this.showMessage("This one looks good!"));
+        rock2.on('pointerdown', () => {
+            if(this.hasItem("quartz")){
+                this.showMessage("You dont need any quartz right now");
+            }
+            else{
+                this.showMessage("You got some quartz!");
+                this.gainItem("quartz");
+            }
+        });
+
+        let checked = false;
+        let rock3 = this.add.text(this.w * 0.4, this.w * 0.1, "🪨"); 
+        rock3.setFontSize(this.s * 2);
+        rock3.setInteractive();
+        rock3.on('pointerover', () => this.showMessage("This rock looks a little small..."));
+        rock3.on('pointerdown', () => {
+            if(checked == false){
+                this.showMessage("OMG you found GOLD!....but oops you dropped it and lost it :(");
+                checked = true;
+            }
+            else{
+                this.showMessage("No matter how hard you look, that gold is gone.");
+            }
+        });
+
+        let rock4 = this.add.text(this.w * 0.5, this.w * 0.45, "🪨"); 
+        rock4.setFontSize(this.s * 5);
+        rock4.setInteractive();
+        rock4.on('pointerover', () => this.showMessage("This rock is WAY too big."));
+
+        let rock5 = this.add.text(this.w * 0.3, this.w * 0.3, "🪨"); 
+        rock5.setFontSize(this.s * 3);
+        rock5.setInteractive();
+        rock5.on('pointerover', () => this.showMessage("I think I can see some quartz under the dirt!!"));
+        rock5.on('pointerdown', () => {
+            if(!this.hasItem("roseQuartz")){
+                this.showMessage("WOW you found some ROSE QUARTZ");
+                this.gainItem("roseQuartz");
+            }
+            else{
+                this.showMessage("You dont need any more quartz right now");
+            }
+        });
+
+        let snake = this.add.text(this.w * 0.1, this.w * 0.05, "🐍");
+        snake.setFontSize(this.s*2.5);
+        snake.setInteractive();
+        snake.on("pointerover", () => this.showMessage("Lets NOT get too close to this little guy"));
+        //maybe make player die if they click the snake??
     }
 }
 
@@ -348,8 +435,8 @@ const game = new Phaser.Game({
         height: 1080
     },
     //scene: [Intro, Demo1, Demo2, Outro],
-    //scene: [Intro, Home, Road, Hills, Farm],
-    scene: [Intro,Home, Road,Hills,Farm],
+    scene: [Intro, Home, Road, Hills, Farm],
+    //scene: [Hills,Farm],
     title: "Quiet West",
 });
 
