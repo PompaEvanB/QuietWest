@@ -1,121 +1,16 @@
-class Demo1 extends AdventureScene {
-    constructor() {
-        super("demo1", "First Room");
-    }
-
-    onEnter() {
-
-        let clip = this.add.text(this.w * 0.3, this.w * 0.3, "📎 paperclip")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => this.showMessage("Metal, bent."))
-            .on('pointerdown', () => {
-                this.showMessage("No touching!");
-                this.tweens.add({
-                    targets: clip,
-                    x: '+=' + this.s,
-                    repeat: 2,
-                    yoyo: true,
-                    ease: 'Sine.inOut',
-                    duration: 100
-                });
-            });
-
-        let key = this.add.text(this.w * 0.5, this.w * 0.1, "🔑 key")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage("It's a nice key.")
-            })
-            .on('pointerdown', () => {
-                this.showMessage("You pick up the key.");
-                this.gainItem('key');
-                this.tweens.add({
-                    targets: key,
-                    y: `-=${2 * this.s}`,
-                    alpha: { from: 1, to: 0 },
-                    duration: 500,
-                    onComplete: () => key.destroy()
-                });
-            })
-
-        let door = this.add.text(this.w * 0.1, this.w * 0.15, "🚪 locked door")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => {
-                if (this.hasItem("key")) {
-                    this.showMessage("You've got the key for this door.");
-                } else {
-                    this.showMessage("It's locked. Can you find a key?");
-                }
-            })
-            .on('pointerdown', () => {
-                if (this.hasItem("key")) {
-                    this.loseItem("key");
-                    this.showMessage("*squeak*");
-                    door.setText("🚪 unlocked door");
-                    this.gotoScene('demo2');
-                }
-            })
-
-    }
-}
-
-class Demo2 extends AdventureScene {
-    constructor() {
-        super("demo2", "The second room has a long name (it truly does).");
-    }
-    onEnter() {
-        this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage("You've got no other choice, really.");
-            })
-            .on('pointerdown', () => {
-                this.gotoScene('demo1');
-            });
-
-        let finish = this.add.text(this.w * 0.6, this.w * 0.2, '(finish the game)')
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage('*giggles*');
-                this.tweens.add({
-                    targets: finish,
-                    x: this.s + (this.h - 2 * this.s) * Math.random(),
-                    y: this.s + (this.h - 2 * this.s) * Math.random(),
-                    ease: 'Sine.inOut',
-                    duration: 500
-                });
-            })
-            .on('pointerdown', () => this.gotoScene('outro'));
-    }
-}
-
-/*
-class Intro extends Phaser.Scene {
-    constructor() {
-        super('intro')
-    }
-    create() {
-        this.add.text(50,50, "Adventure awaits!").setFontSize(50);
-        this.add.text(50,100, "Click anywhere to begin.").setFontSize(20);
-        this.input.on('pointerdown', () => {
-            this.cameras.main.fade(1000, 0,0,0);
-            this.time.delayedCall(1000, () => this.scene.start('demo1'));
-        });
-    }
-}
-*/
-
 class Outro extends Phaser.Scene {
     constructor() {
-        super('outro');
+        super('Outro');
     }
     create() {
-        this.add.text(50, 50, "That's all!").setFontSize(50);
+        this.add.text(50, 50, "FIN").setFontSize(50);
         this.add.text(50, 100, "Click anywhere to restart.").setFontSize(20);
-        this.input.on('pointerdown', () => this.scene.start('intro'));
+        this.input.on('pointerdown', () => this.scene.start('Intro'));
+
+        this.cameras.main.setBackgroundColor("#000000");
+        let ground = this.add.rectangle(0,1080,3920,300,0x520D52);
+        let moon = this.add.ellipse(900,300,300,300,0xffffff);
+
     }
 }
 
@@ -174,6 +69,9 @@ class Home extends AdventureScene{
             }
         })
         house.on('pointerdown', () => {
+            if(this.hasItem("💤")){
+                this.gotoScene("Outro");
+            }
             if(this.hasItem("mail")&&!this.hasItem("key")){
                 this.showMessage("'Thank you sugarbear' your mom says. Can you get me some quartz from the hills? She gives you your car keys.");
                 this.loseItem("mail");
@@ -210,6 +108,7 @@ class Home extends AdventureScene{
         car.setInteractive();
         car.on('pointerover', () => this.showMessage("This is your car. Your dad got it for you! You can use this car to travel."));
         car.on('pointerdown', () => {
+            car.setFontSize(this.s * 5);
             if(!this.hasItem("key") && !this.hasItem("mail")){
                 this.showMessage("Go to the mail box and get the mail first!");
             }
@@ -424,6 +323,54 @@ class Farm extends AdventureScene{
     }
     onEnter(){
         this.cameras.main.setBackgroundColor("#348C31");
+
+        let car = this.add.text(this.w * 0.4, this.w * 0.5, "🚗");
+        car.setFontSize(this.s*2.5);
+        car.setInteractive();
+        car.on('pointerover', () => this.showMessage("Click on me to go back to the road!"));
+        car.on('pointerdown', () => {
+            this.gotoScene("Road");
+        });
+
+        let horse = this.add.text(this.w * 0.2, this.w * 0.22, "🐎"); 
+        horse.setFontSize(this.s*2.5);
+        horse.setInteractive();
+        horse.on("pointerover", () => this.showMessage("He seems hungry..."));
+        horse.on("pointerdown", () => {
+            if(this.hasItem("animal food") || this.hasItem("Animal Food")){
+                this.showMessage("The horse seems very happy! Its time to go home...");
+                this.gainItem("💤");
+                if(this.hasItem("animal food")){
+                    this.loseItem("animal food");
+                }
+                else{
+                    this.loseItem("Animal Food");
+                }
+            }
+            else{
+                this.showMessage("You dont have any animal food...");
+            }
+        });
+
+
+        let horse2 = this.add.text(this.w * 0.3, this.w * 0.3, "🦙"); 
+        horse2.setFontSize(this.s*2.5);
+        horse2.setInteractive();
+        horse2.on('pointerover', () => this.showMessage("this llama seems full"));
+
+        let horse3 = this.add.text(this.w * 0.4, this.w * 0.1, "🦙"); 
+        horse3.setFontSize(this.s*2.5);
+        horse3.setInteractive();
+        horse3.on('pointerover', () => this.showMessage("this llama is too far away"));
+
+        let horse4 = this.add.text(this.w * 0.5, this.w * 0.2, "🦙"); 
+        horse4.setFontSize(this.s*2.5);
+        horse4.setInteractive();
+        horse4.on('pointerover', () => this.showMessage("this llama is too tired to eat"));
+
+        let gate = this.add.text(this.w * 0.004, this.w * 0.35, "🥅🥅🥅🥅🥅🥅🥅🥅🥅🥅🥅🥅🥅🥅🥅🥅🥅🥅"); 
+        gate.setFontSize(this.s*3);
+        gate.setInteractive();
     }
 }
 
@@ -434,9 +381,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    //scene: [Intro, Demo1, Demo2, Outro],
-    scene: [Intro, Home, Road, Hills, Farm],
-    //scene: [Hills,Farm],
+    scene: [Intro, Home, Road, Hills, Farm, Outro],
     title: "Quiet West",
 });
 

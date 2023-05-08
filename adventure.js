@@ -80,6 +80,7 @@ class AdventureScene extends Phaser.Scene {
         if (this.inventoryTexts) {
             this.inventoryTexts.forEach((t) => t.destroy());
         }
+        
         this.inventoryTexts = [];
         let h = this.h * 0.66 + 3 * this.s;
         this.inventory.forEach((e, i) => {
