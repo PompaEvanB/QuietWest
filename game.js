@@ -106,9 +106,19 @@ class Home extends AdventureScene{
         let car = this.add.text(this.w * 0.45, this.w * 0.3, "🚗");
         car.setFontSize(this.s * 4);
         car.setInteractive();
-        car.on('pointerover', () => this.showMessage("This is your car. Your dad got it for you! You can use this car to travel."));
+        car.on('pointerover', () => {
+            this.showMessage("This is your car. Your dad got it for you! You can use this car to travel.");
+            this.tweens.add({
+                targets: car,
+                x: '+=' + this.s,
+                repeat: 2,
+                yoyo: true,
+                ease: 'Sine.inOut',
+                duration: 100
+            });
+
+        });
         car.on('pointerdown', () => {
-            car.setFontSize(this.s * 5);
             if(!this.hasItem("key") && !this.hasItem("mail")){
                 this.showMessage("Go to the mail box and get the mail first!");
             }
@@ -248,7 +258,17 @@ class Hills extends AdventureScene{
         let car = this.add.text(this.w * 0.7, this.w * 0.25, "🚗");
         car.setFontSize(this.s * 4);
         car.setInteractive();
-        car.on('pointerover', () => this.showMessage("Click on me to go back to the road!"));
+        car.on('pointerover', () => {
+            this.showMessage("Click on me to go back to the road!");
+            this.tweens.add({
+                targets: clip,
+                x: '+=' + this.s,
+                repeat: 2,
+                yoyo: true,
+                ease: 'Sine.inOut',
+                duration: 100
+            });  
+        });
         car.on('pointerdown', () => {
             this.gotoScene("Road");
         });
@@ -259,6 +279,14 @@ class Hills extends AdventureScene{
         rock.on('pointerover', () => this.showMessage("This rock looks promising..."));
         rock.on('pointerdown', () => {
             this.showMessage("Dang, nothing here..");
+            this.tweens.add({
+                targets: rock,
+                x: '+=' + this.s,
+                repeat: 2,
+                yoyo: true,
+                ease: 'Sine.inOut',
+                duration: 100
+            }); 
         });
 
         let rock2 = this.add.text(this.w * 0.2, this.w * 0.5, "🪨"); 
@@ -273,6 +301,14 @@ class Hills extends AdventureScene{
                 this.showMessage("You got some quartz!");
                 this.gainItem("quartz");
             }
+            this.tweens.add({
+                targets: rock2,
+                x: '+=' + this.s,
+                repeat: 2,
+                yoyo: true,
+                ease: 'Sine.inOut',
+                duration: 100
+            }); 
         });
 
         let checked = false;
@@ -294,6 +330,14 @@ class Hills extends AdventureScene{
         rock4.setFontSize(this.s * 5);
         rock4.setInteractive();
         rock4.on('pointerover', () => this.showMessage("This rock is WAY too big."));
+        this.tweens.add({
+            targets: rock4,
+            x: '+=' + this.s,
+            repeat: 2,
+            yoyo: true,
+            ease: 'Sine.inOut',
+            duration: 500
+        }); 
 
         let rock5 = this.add.text(this.w * 0.3, this.w * 0.3, "🪨"); 
         rock5.setFontSize(this.s * 3);
@@ -307,6 +351,14 @@ class Hills extends AdventureScene{
             else{
                 this.showMessage("You dont need any more quartz right now");
             }
+            this.tweens.add({
+                targets: rock5,
+                x: '+=' + this.s,
+                repeat: 2,
+                yoyo: true,
+                ease: 'Sine.inOut',
+                duration: 100
+            }); 
         });
 
         let snake = this.add.text(this.w * 0.1, this.w * 0.05, "🐍");

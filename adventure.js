@@ -10,7 +10,8 @@ class AdventureScene extends Phaser.Scene {
     }
 
     create() {
-        this.transitionDuration = 1000;
+        this.transitionDuration = 100;
+        this.messageDuration = 50;
 
         this.w = this.game.config.width;
         this.h = this.game.config.height;
@@ -59,7 +60,7 @@ class AdventureScene extends Phaser.Scene {
             targets: this.messageBox,
             alpha: { from: 1, to: 0 },
             easing: 'Quintic.in',
-            duration: 4 * this.transitionDuration
+            duration: message.length * this.messageDuration
         });
     }
 
